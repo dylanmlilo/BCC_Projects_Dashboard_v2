@@ -1,0 +1,45 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="stats-container">
+    <h1>GIS Projects</h1>
+</div>
+<p class="card-text date">{{ today_date }}</p>
+<div class="stats_data_container">
+    <h2>Summary of GIS Projects</h2>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered">
+            <tr class="table-dark">
+                <th>OUT PUT</th>
+                <th>
+                    ACTIVITY<br>
+                    Activities add up
+                    to 100% of the
+                    Output
+                </th>
+                <th>
+                    TASK<br>
+                    Tasks add up to 100%
+                    of the Activity
+                </th>
+                <th>
+                    RESPONSIBLE
+                    OFFIER/PERSON<br>
+                    Names of Responsible
+                    People in Full
+                </th>
+                <th>DESIGNATION</th>
+            </tr>
+
+            {% for gis_data in gis_data %}
+            <tr class="table-dark {% if loop.index % 2 == 1 %}table-active{% else %}{% endif %}">
+                <td>{{ gis_data.output_name }}</td>
+                <td>{{ gis_data.activity }}</td>
+                <td>{{ gis_data.task_description }}</td>
+                <td>{{ gis_data.responsible_person}}</td>
+                <td>{{ gis_data.designation }}</td>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock%}
