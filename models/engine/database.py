@@ -2,6 +2,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy import create_engine, select, join
 from models.projects import ProjectsData, ProjectManagers
 from models.gis import Output, Activity, ResponsiblePerson, Task
+from models.strategic import StrategicTask
 from dotenv import load_dotenv
 import os
 
@@ -106,6 +107,7 @@ def gis_data_to_dict_list():
         
     finally:
         session.close()
+        
 
     results = session.execute(query).fetchall()
 
@@ -124,7 +126,42 @@ def gis_data_to_dict_list():
 
     return gis_data
 
-# Example usage
+
+def strategic_tasks_to_dict_list():
+    # Perform a join between StrategicTask and ProjectManagers on the assigned_to column
+    query = session.query(StrategicTask, ProjectManagers.name).join(ProjectManagers, StrategicTask.assigned_to == ProjectManagers.id)
+    
+    # Execute the query and fetch all results
+    results = query.all()
+    
+    # Create a list of dictionaries with the task details and project manager names
+    task_list = [
+    {
+        'task_id': task.task_id,
+        'status': task.status,
+        'priority': task.priority,
+        'deadline': task.deadline,
+        'task': task.task,
+        'description': task.description,
+        'assigned_to': task.assigned_to,
+        'project_manager': project_manager_name,
+        'deliverables': task.deliverables,
+        'percentage_done': task.percentage_done,
+        'fixed_cost': task.fixed_cost,
+        'estimated_hours': task.estimated_hours,
+        'actual_hours': task.actual_hours
+    }
+    for task, project_manager_name in results
+    ]
+    
+    session.rollback()
+    
+    return task_list
+
+
+# strategic_data = strategic_tasks_to_dict_list()
+# print(strategic_data)
+
 # gis_data = gis_data_to_dict_list()
 # print(gis_data)
 

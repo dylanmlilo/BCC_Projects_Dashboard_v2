@@ -47,7 +47,7 @@
 }
 
 .stats_data_container {
-    background: rgb(165, 172, 172);
+    background: rgba(107, 109, 109, 0.712);
     width: 100%;
     margin-top: 100px;
     border: 2px solid #948d8d;
@@ -56,7 +56,7 @@
 }
 
 .stats_data_container:hover {
-    background: rgba(107, 109, 109, 0.712);
+    background: rgb(165, 172, 172);
     border-radius: 10px;
 }
 
@@ -211,9 +211,24 @@ h3 {
     width: 100%;
 }
 
-.table-success {
-    background-color: green;  /* Change this to your desired color */
-    color: #000000;  /* Ensure text is readable against the background */
+.table-responsive .table .table-light .table-yellow {
+    background-color: #ffff00;
+}
+
+.table-responsive .table .table-light .table-red {
+    background-color: #ff0000;
+}
+
+.table-responsive .table .table-green {
+    background-color: #0c960c;
+}
+
+.table-responsive .table .table-light_green {
+    background-color: #90ee90;
+}
+
+.table-responsive .table .table-blue {
+    background-color: #95d7ec;
 }
 
 @media (max-width: 480px) {
@@ -253,6 +268,14 @@ h3 {
 
     .stats-container {
         background: url("../images/excavator480.jpg") no-repeat center;
+    }
+
+    .stats-container.strategic {
+        background: url("../images/strats480.jpg") no-repeat;
+    }
+
+    .stats-container.gis{
+    background: url("../images/gis610.jpg") no-repeat;
     }
 
     .stats-container h1 {
@@ -334,6 +357,14 @@ h3 {
         background: url("../images/excavator610.jpg") no-repeat center;
     }
 
+    .stats-container.strategic {
+        background: url("../images/strats610.jpg") no-repeat;
+    }
+
+    .stats-container.gis{
+        background: url("../images/gis610.jpg") no-repeat;
+    }
+
     .stats_data_container {
         width: 95%;
         font-size: 0.9rem;
@@ -386,6 +417,14 @@ h3 {
         background: url("../images/excavator991.jpg") no-repeat center;
     }
 
+    .stats-container.strategic {
+        background: url("../images/strats991.jpg") no-repeat;
+    }
+
+    .stats-container.gis{
+        background: url("../images/gis991.jpg") no-repeat;
+    }
+
     .stats_data_container {
         width: 95%;
     }
@@ -417,6 +456,14 @@ h3 {
 
     .stats-container {
         background: url("../images/excavator2.jpg") no-repeat center;
+    }
+
+    .stats-container.strategic{
+        background: url("../images/strats1500.jpg") no-repeat;
+    }
+
+    .stats-container.gis{
+        background: url("../images/gis1500.jpg") no-repeat;
     }
 
     .stats-container h1 {
@@ -455,5 +502,13 @@ h3 {
     .img_container1, .img_container2 {
         width: 70%;
         height: 100%;
+    }
+
+    .stats-container.strategic{
+        background: url("../images/strats2.jpg") no-repeat;
+    }
+
+    .stats-container.gis{
+        background: url("../images/gis2500.jpg") no-repeat;
     }
 }

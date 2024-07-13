@@ -27,6 +27,7 @@ class Activity(Base):
 
   def __repr__(self):
     return f"Activity(id={self.id}, activity='{self.activity}', output_id={self.output_id}, responsible_person_id={self.responsible_person_id})"
+
 class ResponsiblePerson(Base):
   __tablename__ = "responsiblepeople"
 

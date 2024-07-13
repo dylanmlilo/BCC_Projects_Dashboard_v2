@@ -1,10 +1,50 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<div class="stats-container">
+<div class="stats-container strategic">
     <h1>Strategic Planning</h1>
 </div>
 <p class="card-text date">{{ today_date }}</p>
+<div class="stats_data_container">
+    <h2>Task Management Tracking</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tr class="table-dark">
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Deadline</th>
+                <th>Task</th>
+                <th>Description</th>
+                <th>Assigned To</th>
+                <th>Deliverable</th>
+                <th>% Done</th>
+                <th>Fixed Cost</th>
+                <th>Estimated Hours</th>
+                <th>Actual Hours</th>
+            </tr>
+
+            {% for strategic_data in strategic_data_list %}
+            <tr class="table-light">
+                <td class="{% if strategic_data.status == 'In Progress' %}table-light_green
+                {%elif strategic_data.status == 'Complete' %}table-green
+                {%elif strategic_data.status == 'Overdue' %}table-red
+                {% else %}table-success{% endif %}">{{ strategic_data.status }}</td>
+                <td class="{% if strategic_data.priority == 'Low' %}table-blue 
+                {%elif strategic_data.priority == 'High' %}table-red
+                {% else %}table-yellow{% endif %}">{{ strategic_data.priority }}</td>
+                <td>{{ strategic_data.deadline }}</td>
+                <td>{{ strategic_data.task }}</td>
+                <td>{{ strategic_data.description}}</td>
+                <td>{{ strategic_data.project_manager }}</td>
+                <td>{{ strategic_data.deliverables }}</td>
+                <td>{{ strategic_data.percentage_done }}</td>
+                <td>{{ strategic_data.fixed_cost }}</td>
+                <td>{{ strategic_data.estimated_hours }}</td>
+                <td>{{ strategic_data.actual_hours }}</td>
+            {% endfor %}
+        </table>
+    </div>
+</div>
 <!-- <div class="stats_data_container"> -->
     <!-- <h2>Summary of Strategic Planning Projects</h2> -->
     <img src="{{ url_for('static', filename='images/strategic1.png') }}" class="gis_image" alt="Strategic Planning Projects">
