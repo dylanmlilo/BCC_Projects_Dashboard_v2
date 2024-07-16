@@ -129,8 +129,13 @@ def gis_data_to_dict_list():
 
 def strategic_tasks_to_dict_list():
     # Perform a join between StrategicTask and ProjectManagers on the assigned_to column
-    query = session.query(StrategicTask, ProjectManagers.name).join(ProjectManagers, StrategicTask.assigned_to == ProjectManagers.id)
-    
+    try:
+        query = session.query(StrategicTask, ProjectManagers.name).join(ProjectManagers, StrategicTask.assigned_to == ProjectManagers.id)
+    except:
+        session.rollback()
+    finally:
+        session.close()
+
     # Execute the query and fetch all results
     results = query.all()
     
@@ -153,8 +158,6 @@ def strategic_tasks_to_dict_list():
     }
     for task, project_manager_name in results
     ]
-    
-    session.rollback()
     
     return task_list
 
