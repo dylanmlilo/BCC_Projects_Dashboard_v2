@@ -126,6 +126,20 @@ def gis_data_to_dict_list():
 
     return gis_data
 
+def gis_data_to_responsible_person():
+    gis_data = gis_data_to_dict_list()
+    responsible_person_dict = {}
+    
+    for data in gis_data:
+        person_name = data['responsible_person']
+        if person_name not in responsible_person_dict:
+            responsible_person_dict[person_name] = []
+        responsible_person_dict[person_name].append(data)
+    
+    return responsible_person_dict
+
+# test = gis_data_to_responsible_person()
+# print(test)
 
 def strategic_tasks_to_dict_list():
     # Perform a join between StrategicTask and ProjectManagers on the assigned_to column
@@ -171,8 +185,8 @@ def strategic_tasks_to_dict_list():
 # print(servicing_data_dict(4))
 
 
-# print(projects_data_to_dict_list())
-# print(servicing_data_dict(1))
+# print(projects_data_to_dict_list(1))
+
 
 # def project_managers_to_dict():
 #     project_managers = []

@@ -121,6 +121,7 @@ def plot_servicing_page_charts():
   for project_data in servicing_data:
     contract_name = project_data.get("contract_name")
     contractor = project_data.get("contractor")
+    link = project_data.get("link")
     progress_data = {
       "Progress Type": [
         "Water", "Sewer", "Roads", "Storm Drainage", "Public Lighting", "Total Progress"
@@ -151,7 +152,7 @@ def plot_servicing_page_charts():
           'family': 'Arial'
         }
       },
-      xaxis_title_text="Contractor - {}".format(contractor),
+      xaxis_title_text = "Contractor - {} -- <a href='{}'>Link to Google Drive Folder</a>".format(contractor, link),
       yaxis_title_text="Progress Percentage(%)",
       xaxis_title_font_size=17,
       yaxis_title_font_size=17,
