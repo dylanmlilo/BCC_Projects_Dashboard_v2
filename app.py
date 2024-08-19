@@ -1,7 +1,9 @@
-from flask import Flask, abort, render_template, jsonify
+from flask import Flask, render_template, abort, jsonify, request, redirect, url_for, flash
+from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 from models.plot_functions import today_date, plot_home_page_charts, plot_servicing_page_charts, progress_bar
 from models.engine.database import session, projects_data_to_dict_list, gis_data_to_dict_list, gis_data_to_responsible_person, strategic_tasks_to_dict_list
-from models.projects import ContractType
+from models.users import Users
+from models.login import LoginForm
 import os
 import requests
 from dotenv import load_dotenv
@@ -11,6 +13,79 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
+
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    """
+    Loads a user object from the database based on the user ID.
+
+    Args:
+        user_id (int): The ID of the user.
+
+    Returns:
+        Users or None: The user object if found, None otherwise.
+    """
+    try:
+        user = session.query(Users).get(int(user_id))
+    except:
+        session.rollback()
+    finally:
+        session.close()
+    return user
+
+
+@app.route('/login', strict_slashes=False, methods=['GET', 'POST'])
+def login():
+    """
+    Renders the login page template and handles user login.
+
+    Returns:
+        flask.Response: The rendered login page template or a redirect
+        to the admin dashboard.
+    """
+    form = LoginForm()
+    if form.validate_on_submit():
+        try:
+            user = session.query(Users).filter_by(username=form.username.data).first()
+        except:
+            session.rollback()
+        finally:
+            session.close()
+        if user and user.password == form.password.data:
+            login_user(user)
+            return redirect(url_for('admin_dashboard'))
+        else:
+            flash('Invalid username or password', 'error')  # Flash an error message
+    return render_template('login.html', form=form)
+
+@app.route('/logout', strict_slashes=False)
+def logout():
+    """
+    Logs out the current user and redirects to the login page.
+
+    Returns:
+        flask.Response: A redirect response to the login page.
+    """
+    logout_user()
+    return redirect(url_for('login'))
+
+
+@app.route("/admin_dashboard", strict_slashes=False)
+@login_required
+def admin_dashboard():
+    """
+    Renders the admin dashboard page.
+
+    Returns:
+        flask.Response: The rendered admin dashboard template.
+    """
+    return render_template("admin_dashboard.html")
 
 
 @app.route("/", strict_slashes=False)

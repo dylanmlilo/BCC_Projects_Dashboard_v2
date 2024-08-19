@@ -94,10 +94,6 @@
     border-radius: 5px;
 }
 
-.admin-dashboard_title, .login-title{
-    margin-top: 100px;
-}
-
 .admin-dashboard_select {
     margin-top: 60px;
     margin-bottom: 20px;
@@ -148,17 +144,37 @@
     margin: 20px 5px;
 }
 
-.logadmin_container {
+.login_container, .admin_dashboard {
     background: linear-gradient(to right, rgba(47, 182, 182, 0.767), rgba(47, 182, 182, 0.6), rgba(47, 182, 182, 0.767));
-    width: 1000px;
-    height: 280px;
-    margin: 135px auto;
+    width: 80%;
+    height: 350px;
+    margin: 90px auto;
     border-radius: 20px;
     color: whitesmoke;
     text-shadow: 1px 1px 2px #000;
   }
 
-.logadmin_container h1 {
+.login_container {
+    height: 350px;
+}
+
+.admin_dashboard {
+    height: 300px;
+}
+
+
+.login_container .alert {
+    color: red;
+    text-shadow: none;
+    font-size: 1.3rem;
+}
+
+.login_container .form-container label {
+    font-size: 1.3rem;
+    margin: 0 8px;
+}
+
+.login_container h1, .admin_dashboard h1 {
     padding-top: 25px;
 }
 
