@@ -17,26 +17,34 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-def project_managers_to_dict_list():
+def project_managers_to_dict_list(section_name=None):
     """
     Convert SQLAlchemy query results into a list of dictionaries.
     Exclude the _sa_instance_state attribute.
+    
+    Args:
+        section_name (str, optional): Name of the section to filter project managers. Defaults to None.
     
     Returns:
         list: A list of dictionaries containing project managers.
     """
     try:
-        project_managers = session.query(ProjectManagers).all()
+        if section_name:
+            project_managers = session.query(ProjectManagers).filter(ProjectManagers.section == section_name).all()
+        else:
+            project_managers = session.query(ProjectManagers).all()
     except:
         session.rollback()
     finally:
         session.close()
+    
     result_list = []
     for row in project_managers:
         result_dict = {}
         for column in row.__table__.columns:
             result_dict[column.name] = getattr(row, column.name)
         result_list.append(result_dict)
+    
     return result_list
 
 
@@ -253,35 +261,33 @@ def gis_task_data_to_dict_list():
     return task_list
 
 def strategic_tasks_to_dict_list():
-    # Perform a join between StrategicTask and ProjectManagers on the assigned_to column
     try:
-        query = session.query(StrategicTask, ProjectManagers.name).join(ProjectManagers, StrategicTask.assigned_to == ProjectManagers.id)
+        query = session.query(StrategicTask, ProjectManagers.name, ProjectManagers.section).join(ProjectManagers, StrategicTask.assigned_to == ProjectManagers.id)
     except:
         session.rollback()
     finally:
         session.close()
 
-    # Execute the query and fetch all results
     results = query.all()
     
-    # Create a list of dictionaries with the task details and project manager names
     task_list = [
-    {
-        'task_id': task.task_id,
-        'status': task.status,
-        'priority': task.priority,
-        'deadline': task.deadline,
-        'task': task.task,
-        'description': task.description,
-        'assigned_to': task.assigned_to,
-        'project_manager': project_manager_name,
-        'deliverables': task.deliverables,
-        'percentage_done': task.percentage_done,
-        'fixed_cost': task.fixed_cost,
-        'estimated_hours': task.estimated_hours,
-        'actual_hours': task.actual_hours
-    }
-    for task, project_manager_name in results
+        {
+            'task_id': task.StrategicTask.task_id,
+            'status': task.StrategicTask.status,
+            'priority': task.StrategicTask.priority,
+            'deadline': task.StrategicTask.deadline,
+            'task': task.StrategicTask.task,
+            'description': task.StrategicTask.description,
+            'assigned_to': task.StrategicTask.assigned_to,
+            'project_manager': task.name,
+            'section': task.section,
+            'deliverables': task.StrategicTask.deliverables,
+            'percentage_done': task.StrategicTask.percentage_done,
+            'fixed_cost': task.StrategicTask.fixed_cost,
+            'estimated_hours': task.StrategicTask.estimated_hours,
+            'actual_hours': task.StrategicTask.actual_hours
+        }
+        for task in results
     ]
-    
+
     return task_list

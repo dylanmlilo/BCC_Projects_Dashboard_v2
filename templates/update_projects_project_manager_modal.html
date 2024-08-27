@@ -1,0 +1,35 @@
+{% block content %}
+<!-- Update Project Manager Modal -->
+<div class="modal fade" id="updateProjectsProjectManagerModal{{ project_manager.id }}" tabindex="-1" role="dialog" aria-labelledby="updateProjectsProjectManagerModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateProjectsProjectManagerModalLabel">Edit Form</h5>
+        </div>
+        <div class="modal-body">
+          <form action="{{ url_for('update_projects_project_manager', project_manager_id=project_manager.id) }}" method="post">
+            <div class="form-group">
+                <label>Name <span style="color: red;">*</span></label>
+                <input type="text" class="form-control" name="name"  value="{{ project_manager.name }}" required>
+            </div>
+            <div class="form-group">
+                <select class="form-control" name="section" required>
+                    <option value="Projects">Projects</option>
+                    <option value="Water">Water</option>
+                    <option value="Sanitation">Sanitation</option>
+                    <option value="Electromechanical">Electromechanical</option>
+                    <option value="Strategic Planning">Strategic Planning</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary left-aligned-button" style="float: left;" type="submit">Submit</button>
+            </div>
+          </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

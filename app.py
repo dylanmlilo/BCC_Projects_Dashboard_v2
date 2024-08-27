@@ -4,9 +4,9 @@ from models.plot_functions import today_date, plot_home_page_charts, plot_servic
 from models.engine.database import session, projects_data_to_dict_list, gis_data_to_dict_list, gis_data_to_responsible_person, strategic_tasks_to_dict_list, gis_output_data_to_dict_list, gis_activity_data_to_dict_list, gis_responsible_person_data_to_dict_list, gis_task_data_to_dict_list, project_managers_to_dict_list
 from models.users import Users
 from models.login import LoginForm
-from models.projects import ProjectsData
+from models.projects import ProjectsData, ProjectManagers
 from models.gis import ResponsiblePerson, Activity, Task, Output
-from models.strategic import StrategicTask
+from routes.routes_strategic import strategic_bp
 import os
 import requests
 from dotenv import load_dotenv
@@ -15,6 +15,7 @@ load_dotenv()
 
 
 app = Flask(__name__)
+app.register_blueprint(strategic_bp)
 app.secret_key = os.getenv("SECRET_KEY")
 
 
@@ -195,9 +196,61 @@ def projects_data():
 
     """
     projects_data = projects_data_to_dict_list()
+    project_managers = project_managers_to_dict_list()
     formatted_date = today_date()
     return render_template("projects_data.html", today_date=formatted_date,
-                           projects_data=projects_data)
+                           projects_data=projects_data, project_managers=project_managers)
+
+
+@app.route("/insert_project_manager", methods=['POST'])
+def insert_project_manager():
+    """
+    Function to handle insert project manager route."""
+
+    if request.method == 'POST':
+        try:
+            name = request.form.get('name')
+            section = request.form.get('section')
+
+            new_project_manager = ProjectManagers(name=name, section=section)
+            session.add(new_project_manager)
+            session.commit()
+            flash('Data inserted successfully')
+            return redirect(request.referrer)
+        
+        except Exception as e:
+            session.rollback()
+            return jsonify({'error': str(e)}), 400
+        
+        finally:
+            session.close()
+
+
+@app.route("/update_projects_project_manager/<int:project_manager_id>", methods=['POST'])
+def update_projects_project_manager(project_manager_id):
+    """
+    Function to handle update project manager route."""
+
+    if request.method == 'POST':
+        try:
+            project_manager = session.query(ProjectManagers).filter_by(id=project_manager_id).first()
+            if project_manager:
+                project_manager.name = request.form.get('name')
+                project_manager.section = request.form.get('section')
+                session.commit()
+                flash('Data updated successfully')
+            else:
+                flash('Project manager not found')
+
+            return redirect(request.referrer)
+
+        except Exception as e:
+            session.rollback()
+            return jsonify({'error': str(e)}), 400
+
+        finally:
+            session.close()
+
 
 
 @app.route('/insert_projects_data', methods=['POST'])
@@ -218,6 +271,7 @@ def insert_projects_data():
             section_id = request.form.get('section_id')
             contractor = request.form.get('contractor')
             year = request.form.get('year')
+            date_contract_signed = request.form.get('date_contract_signed')
             date_contract_signed_by_bcc = request.form.get('date_contract_signed_by_bcc')
             early_start_date = request.form.get('early_start_date')
             contract_duration_weeks = request.form.get('contract_duration_weeks')
@@ -241,12 +295,6 @@ def insert_projects_data():
             tax_clearance_validation = request.form.get('tax_clearance_validation')
             link = request.form.get('link')
         
-            # Validation checks
-            errors = []
-
-            if errors:
-                return jsonify({'errors': errors}), 400
-
             # Create new project record
             new_project_record = ProjectsData(
                 contract_number=contract_number,
@@ -256,6 +304,7 @@ def insert_projects_data():
                 section_id=section_id,
                 contractor=contractor,
                 year=year,
+                date_contract_signed=date_contract_signed,
                 date_contract_signed_by_bcc=date_contract_signed_by_bcc,
                 early_start_date=early_start_date,
                 contract_duration_weeks=contract_duration_weeks,
@@ -291,6 +340,7 @@ def insert_projects_data():
         
         finally:
             session.close()
+
     
 @app.route("/GIS", strict_slashes=False)
 def gis():
@@ -664,136 +714,6 @@ def delete_gis_task_data(gis_task_data_id):
 
     finally:
         session.close()
-
-
-@app.route('/insert_gis_data', methods=['POST'])
-def insert_gis_data():
-    """
-    Inserts the gis data into the database and redirects to the gis data page.
-
-    Returns:
-        flask.Response: A redirect response to the  dagista page or a JSON response with an error message.
-    """
-    if request.method == 'POST':
-        try:
-            activity = request.form.get('activity')
-            output_id = request.form.get('output_id')
-            responsible_person_id = request.form.get('responsible_person_id')
-            dam_percentage = request.form.get('dam_percentage')
-            dam_volume = request.form.get('dam_volume')
-            daily_inflow = request.form.get('daily_inflow')
-
-            # Validation checks
-            errors = []
-
-            if not daily_inflow:
-                daily_inflow = None
-            else:
-                try:
-                    daily_inflow = float(daily_inflow)
-                except ValueError:
-                    errors.append("daily_inflows must be a valid number")
-
-            if errors:
-                return jsonify({'errors': errors}), 400
-
-            new_dam_record = DamData(dam_id=dam_id, date=date, dam_reading=dam_reading, dam_percentage=dam_percentage, dam_volume=dam_volume, daily_inflow=daily_inflow)
-            session.add(new_dam_record)
-            session.commit()
-            flash('Data inserted successfully')
-            return redirect(url_for('dam_data'))
-
-        except Exception as e:
-            session.rollback()
-            return jsonify({'error': str(e)}), 400
-        
-        finally:
-            session.close()
-    
-@app.route("/StrategicPlanning", strict_slashes=False)
-def strategic_planning():
-    """
-    Function to handle Strategic Planning route.
-
-    Retrieves strategic data list and today's date, then renders the strategic_planning.html template.
-
-    Parameters:
-    - None
-
-    Returns:
-    - Rendered template "strategic_planning.html" with today's date and strategic data list.
-
-    """
-    strategic_data_list = strategic_tasks_to_dict_list()
-    formatted_date = today_date()
-    return render_template("strategic_planning.html", today_date=formatted_date, 
-                           strategic_data_list=strategic_data_list)
-
-
-@app.route("/strategic_planning_data", strict_slashes=False)
-def strategic_planning_data():
-    """
-    Function to handle Strategic Planning data route.
-
-    Retrieves strategic data list and renders the strategic_planning.html template.
-
-    Parameters:
-    - None
-
-    Returns:
-    - Rendered template "strategic_planning.html" with strategic data list.
-    """
-    formatted_date = today_date()
-    strategic_data_list = strategic_tasks_to_dict_list()
-    project_managers = project_managers_to_dict_list()
-    return render_template("strategic_planning_data.html", strategic_data_list=strategic_data_list,
-                           today_date=formatted_date, project_managers=project_managers)
-
-
-@app.route("/insert_strategic_data", methods=['POST'])
-def insert_strategic_data():
-    """
-    Function to handle insert strategic data route.
-
-    Retrieves strategic data list and renders the strategic_planning.html template.
-
-    Parameters:
-    - None
-
-    Returns:
-    - Rendered template "strategic_planning.html" with strategic data list.
-    """
-    if request.method == 'POST':
-        try:
-            task = request.form.get('task')
-            description = request.form.get('description')
-            deliverables = request.form.get('deliverables')
-            assigned_to = request.form.get('assigned_to')
-            deadline = request.form.get('deadline')
-            status = request.form.get('status')
-            priority = request.form.get('priority')
-            percentage_done = request.form.get('percentage_done')
-            fixed_cost = request.form.get('fixed_cost')
-            estimated_hours = request.form.get('estimated_cost')
-            actual_hours = request.form.get('actual_cost')
-
-
-            new_task = StrategicTask(task=task, description=description, deliverables=deliverables, 
-                            assigned_to=assigned_to, deadline=deadline, status=status, 
-                            priority=priority, percentage_done=percentage_done, 
-                            fixed_cost=fixed_cost, estimated_hours=estimated_hours, 
-                            actual_hours=actual_hours)
-            session.add(new_task)
-            session.commit()
-            flash('Data inserted successfully')
-            return redirect(url_for('strategic_planning_data'))
-        
-        except Exception as e:
-            session.rollback()
-            return jsonify({'error': str(e)}), 400
-        
-        finally:
-            session.close()
 
 @app.route("/api/projects_data", strict_slashes=False)
 def projects_data_api():

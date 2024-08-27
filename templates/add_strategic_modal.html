@@ -22,28 +22,28 @@
                         <input type="text" class="form-control" name="task" required>
                     </div>
                     <div class="form-group">
-                        <label>Description <span style="color: red;">*</span></label>
-                        <input type="text" class="form-control" name="description" required>
+                        <label>Description </label>
+                        <input type="text" class="form-control" name="description">
                     </div>
                     <div class="form-group">
-                        <label>Deliverable <span style="color: red;">*</span></label>
-                        <input type="text" class="form-control" name="deliverables" required>
+                        <label>Deliverable </label>
+                        <input type="text" class="form-control" name="deliverables">
                     </div>
                     <div class="form-group">
                         <label>Assigned To <span style="color: red;">*</span></label>
-                        <select class="form-control" name="assigned_to" required>
+                        <select class="form-control form-select" name="assigned_to" required>
                             {% for project_manager in project_managers %}
                                 <option value="{{ project_manager.id }}">{{ project_manager.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Deadline <span style="color: red;">*</span></label>
-                        <input type="text" class="form-control" name="deadline" required>
+                        <label>Deadline </label>
+                        <input type="text" class="form-control" name="deadline">
                     </div>
                     <div class="form-group">
                         <label>Status <span style="color: red;">*</span></label>
-                        <select class="form-control" name="status" required>
+                        <select class="form-control form-select" name="status" required>
                             <option value="Complete">Completed</option>
                             <option value="In Progress">In Progress</option>
                             <option value="Overdue">Overdue</option>
@@ -52,27 +52,27 @@
                     </div>
                     <div class="form-group">
                         <label>Priority <span style="color: red;">*</span></label>
-                        <select class="form-control" name="priority" required>
+                        <select class="form-control form-select" name="priority" required>
                             <option value="High">High</option>
                             <option value="Medium">Medium</option>
                             <option value="Low">Low</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Percentage Done <span style="color: red;">*</span></label>
-                        <input type="number" class="form-control" name="percentage_done" required>
+                        <label>Percentage Done </label>
+                        <input type="number" class="form-control" name="percentage_done">
                     </div>
                     <div class="form-group">
-                        <label>Fixed Cost <span style="color: red;">*</span></label>
-                        <input type="number" class="form-control" name="fixed_cost" required>
+                        <label>Fixed Cost </label>
+                        <input type="number" class="form-control" name="fixed_cost" >
                     </div>
                     <div class="form-group">
-                        <label>Estimated Hours <span style="color: red;">*</span></label>
-                        <input type="number" class="form-control" name="estimated_hours" required>
+                        <label>Estimated Hours </label>
+                        <input type="number" class="form-control" name="estimated_hours">
                     </div>
                     <div class="form-group">
-                        <label>Actual Hours <span style="color: red;">*</span></label>
-                        <input type="number" class="form-control" name="actual_hours" required>
+                        <label>Actual Hours </label>
+                        <input type="number" class="form-control" name="actual_hours">
                     </div>
                     <div class="form-group">
                         <button class="btn btn-primary left-aligned-button" style="float: left;" type="submit">Submit</button>

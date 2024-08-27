@@ -1,10 +1,10 @@
 {% block content %}
 <!-- Update GIS Output Modal -->
-<div class="modal fade" id="updateGISOutputModal{{ output_data.output_id }}" tabindex="-1" role="dialog" aria-labelledby="myGISOutputModalLabel" aria-hidden="true">
+<div class="modal fade" id="updateGISOutputModal{{ output_data.output_id }}" tabindex="-1" role="dialog" aria-labelledby="updateGISOutputModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="myGISOutputModalLabel">Edit Form</h5>
+          <h5 class="modal-title" id="updateGISOutputModalLabel">Edit Form</h5>
         </div>
         <div class="modal-body">
           <form action="{{ url_for('update_gis_output_data', gis_output_data_id=output_data.output_id) }}" method="post">
