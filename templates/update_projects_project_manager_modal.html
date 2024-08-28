@@ -7,7 +7,7 @@
           <h5 class="modal-title" id="updateProjectsProjectManagerModalLabel">Edit Form</h5>
         </div>
         <div class="modal-body">
-          <form action="{{ url_for('update_projects_project_manager', project_manager_id=project_manager.id) }}" method="post">
+          <form action="{{ url_for('projects.update_projects_project_manager', project_manager_id=project_manager.id) }}" method="post">
             <div class="form-group">
                 <label>Name <span style="color: red;">*</span></label>
                 <input type="text" class="form-control" name="name"  value="{{ project_manager.name }}" required>

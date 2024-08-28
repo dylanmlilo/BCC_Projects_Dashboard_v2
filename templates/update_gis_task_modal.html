@@ -7,7 +7,7 @@
           <h5 class="modal-title" id="myGIStaskModalLabel">Edit Form</h5>
         </div>
         <div class="modal-body">
-          <form action="{{ url_for('update_gis_task_data', gis_task_data_id=task_data.task_id) }}" method="post">
+          <form action="{{ url_for('gis_task.update_gis_task_data', gis_task_data_id=task_data.task_id) }}" method="post">
             <div class="form-group">
                 <label>Activity ID <span style="color: red;">*</span></label>
                 <input type="number" class="form-control" name="activity_id" value="{{ task_data.activity_id }}" required>

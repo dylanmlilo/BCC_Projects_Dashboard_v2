@@ -16,7 +16,7 @@
             
             </div>
             <div class="modal-body">
-                <form action="{{ url_for('insert_projects_data') }}" method="post">
+                <form action="{{ url_for('projects.insert_projects_data') }}" method="post">
                     <div class="form-group">
                         <label>Contract Number <span style="color: red;">*</span></label>
                         <input type="text" class="form-control" name="contract_number" required>

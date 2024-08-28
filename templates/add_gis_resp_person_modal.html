@@ -15,7 +15,7 @@
                 {% endwith %}
             </div>
             <div class="modal-body">
-                <form action="{{ url_for('insert_gis_resp_person_data') }}" method="post">
+                <form action="{{ url_for('gis_resp_person.insert_gis_resp_person_data') }}" method="post">
                     <div class="form-group">
                         <label>Name <span style="color: red;">*</span></label>
                         <input type="text" class="form-control" name="responsible_person_name" required>

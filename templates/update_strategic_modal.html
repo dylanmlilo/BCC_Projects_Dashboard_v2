@@ -7,7 +7,7 @@
           <h5 class="modal-title" id="updateStrategicModalLabel">Edit Form</h5>
         </div>
         <div class="modal-body">
-          <form action="{{ url_for('update_strategic_data', strategic_data_id=strategic_data.task_id) }}" method="post">
+          <form action="{{ url_for('strategic.update_strategic_data', strategic_data_id=strategic_data.task_id) }}" method="post">
             <div class="form-group">
                 <label>Task <span style="color: red;">*</span></label>
                 <input type="text" class="form-control" name="task" value="{{ strategic_data.task }}" required>

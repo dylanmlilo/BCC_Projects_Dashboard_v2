@@ -209,7 +209,7 @@ h3 {
 }
 
 .login_container, .admin_dashboard {
-    background: linear-gradient(to right, rgba(47, 182, 182, 0.767), rgba(47, 182, 182, 0.6), rgba(47, 182, 182, 0.767));
+    background: linear-gradient(to top left, rgb(23, 133, 161) 50%, rgb(142, 149, 150) 50%);
     width: 80%;
     height: 350px;
     margin: 90px auto;

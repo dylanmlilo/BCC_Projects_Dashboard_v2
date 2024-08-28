@@ -7,7 +7,7 @@
           <h5 class="modal-title" id="updateGISOutputModalLabel">Edit Form</h5>
         </div>
         <div class="modal-body">
-          <form action="{{ url_for('update_gis_output_data', gis_output_data_id=output_data.output_id) }}" method="post">
+          <form action="{{ url_for('gis_output.update_gis_output_data', gis_output_data_id=output_data.output_id) }}" method="post">
             <div class="form-group">
                 <label>Output Name <span style="color: red;">*</span></label>
                 <input type="text" class="form-control" name="output_name" value="{{ output_data.output_name }}" required>

@@ -46,7 +46,7 @@
               </li>
               {% if current_user.is_authenticated %}
                 <li class="nav-item active">
-                  <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+                  <a class="dropdown-item" href="/logout">Logout</a>
                 </li>
               {% else %}
                 <li class="nav-item active">

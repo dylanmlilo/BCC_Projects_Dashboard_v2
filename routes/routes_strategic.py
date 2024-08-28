@@ -98,7 +98,7 @@ def insert_strategic_data():
             session.add(new_task)
             session.commit()
             flash('Data inserted successfully')
-            return redirect(url_for('strategic_planning_data'))
+            return redirect(url_for('strategic.strategic_planning_data'))
         
         except Exception as e:
             session.rollback()
@@ -153,7 +153,7 @@ def update_strategic_data(strategic_data_id):
 
                 session.commit()
                 flash('Data updated successfully')
-                return redirect(url_for('strategic_planning_data'))
+                return redirect(url_for('strategic.strategic_planning_data'))
 
         except Exception as e:
             session.rollback()
@@ -161,3 +161,32 @@ def update_strategic_data(strategic_data_id):
 
         finally:
             session.close()
+
+
+@strategic_bp.route("/delete_strategic_data/<int:strategic_data_id>")
+def delete_strategic_data(strategic_data_id):
+    """
+    Function to handle delete strategic data route.
+
+    Retrieves strategic data list and renders the strategic_planning.html template.
+
+    Parameters:
+    - None
+
+    Returns:
+    - Rendered template "strategic_planning.html" with strategic data list.
+    """
+    try:
+        task = session.query(StrategicTask).filter_by(task_id=strategic_data_id).first()
+        if task:
+            session.delete(task)
+            session.commit()
+            flash('Data deleted successfully')
+            return redirect(url_for('strategic.strategic_planning_data'))
+
+    except Exception as e:
+        session.rollback()
+        return jsonify({'error': str(e)}), 400
+
+    finally:
+        session.close()
