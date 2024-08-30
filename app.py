@@ -1,8 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask
 from flask_login import LoginManager
-from models.plot_functions import today_date, plot_home_page_charts
-from models.engine.database import session, projects_data_to_dict_list
+from models.engine.database import session
 from models.users import Users
+from routes.routes_home import home_bp
 from routes.routes_strategic import strategic_bp
 from routes.routes_gis_task import gis_task_bp
 from routes.routes_gis_data import gis_data_bp
@@ -22,6 +22,7 @@ load_dotenv()
 
 
 app = Flask(__name__)
+app.register_blueprint(home_bp)
 app.register_blueprint(strategic_bp)
 app.register_blueprint(gis_task_bp)
 app.register_blueprint(gis_data_bp)
@@ -38,7 +39,7 @@ app.secret_key = os.getenv("SECRET_KEY")
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'login.login'
 
 
 @login_manager.user_loader
@@ -59,17 +60,6 @@ def load_user(user_id):
     finally:
         session.close()
     return user
-
-
-@app.route("/", strict_slashes=False)
-def index():
-    projects_data = projects_data_to_dict_list()
-    graph1JSON, graph2JSON, graph3JSON, graph4JSON, graph5JSON = plot_home_page_charts()
-    formatted_date = today_date()
-    return render_template("home.html", graph1JSON=graph1JSON, today_date=formatted_date,
-                           graph2JSON=graph2JSON, graph3JSON=graph3JSON,
-                           graph4JSON=graph4JSON, projects_data=projects_data,
-                           graph5JSON=graph5JSON)
 
 
 if __name__ == "__main__":

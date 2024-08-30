@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from flask_login import login_required
 from models.plot_functions import today_date
 from models.engine.database import session, strategic_tasks_to_dict_list, project_managers_to_dict_list
 from models.strategic import StrategicTask
@@ -29,6 +30,7 @@ def strategic_planning():
 
 
 @strategic_bp.route("/strategic_planning_data", strict_slashes=False)
+@login_required
 def strategic_planning_data():
     """
     Function to handle Strategic Planning data route.
@@ -49,6 +51,7 @@ def strategic_planning_data():
 
 
 @strategic_bp.route("/insert_strategic_data", methods=['POST'])
+@login_required
 def insert_strategic_data():
     """
     Function to handle insert strategic data route.
@@ -109,6 +112,7 @@ def insert_strategic_data():
 
 
 @strategic_bp.route("/update_strategic_data/<int:strategic_data_id>", methods=['POST'])
+@login_required
 def update_strategic_data(strategic_data_id):
     """
     Function to handle update strategic data route.
@@ -164,6 +168,7 @@ def update_strategic_data(strategic_data_id):
 
 
 @strategic_bp.route("/delete_strategic_data/<int:strategic_data_id>")
+@login_required
 def delete_strategic_data(strategic_data_id):
     """
     Function to handle delete strategic data route.
