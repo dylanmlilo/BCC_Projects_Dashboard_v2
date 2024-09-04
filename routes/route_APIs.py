@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models.engine.database import projects_data_to_dict_list
+from models.projects import projects_data_to_dict_list
 
 
 api_bp = Blueprint('api', __name__)

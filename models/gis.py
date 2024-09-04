@@ -12,6 +12,7 @@ class Output(Base):
     name = Column(String(255), nullable=False)
 
     def __init__(self, name):
+        
         self.name = name
 
     def __repr__(self):
@@ -140,6 +141,27 @@ class Task(Base):
 
   def __repr__(self):
     return f"Task(id={self.id}, activity_id={self.activity_id}, description='{self.description}', percentage_of_activity={self.percentage_of_activity})"
+
+  @classmethod
+  def gis_task_data_to_dict_list(cls):
+    task_list = []
+    try:
+        query = session.query(cls.id, cls.description, cls.percentage_of_activity, cls.activity_id).all()
+    except:
+        session.rollback()
+    finally:
+        session.close()
+
+    for row in query:
+        task_dict = {
+            "task_id": row[0],
+            "task_description": row[1],
+            "percentage_of_activity": row[2],
+            "activity_id": row[3]
+        }
+        task_list.append(task_dict)
+
+    return task_list
   
 
 
@@ -200,38 +222,3 @@ def gis_data_to_dict_list():
         gis_data.append(gis_dict)
 
     return gis_data
-
-
-def gis_data_to_responsible_person():
-    gis_data = gis_data_to_dict_list()
-    responsible_person_dict = {}
-
-    for data in gis_data:
-        person_name = data['responsible_person']
-        if person_name not in responsible_person_dict:
-            responsible_person_dict[person_name] = []
-        responsible_person_dict[person_name].append(data)
-    
-    return responsible_person_dict
-
-
-
-def gis_task_data_to_dict_list():
-    task_list = []
-    try:
-        query = session.query(Task.id, Task.description, Task.percentage_of_activity, Task.activity_id).all()
-    except:
-        session.rollback()
-    finally:
-        session.close()
-
-    for row in query:
-        task_dict = {
-            "task_id": row[0],
-            "task_description": row[1],
-            "percentage_of_activity": row[2],
-            "activity_id": row[3]
-        }
-        task_list.append(task_dict)
-
-    return task_list

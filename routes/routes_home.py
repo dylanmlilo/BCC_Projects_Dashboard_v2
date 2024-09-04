@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 from models.plot_functions import today_date, plot_home_page_charts
-from models.engine.database import projects_data_to_dict_list
+from models.projects import projects_data_to_dict_list
 
 home_bp = Blueprint('home', __name__)
 

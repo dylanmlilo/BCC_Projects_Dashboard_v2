@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, Date, DECIMAL, ForeignKey
 from sqlalchemy.orm import relationship
 from models.base import Base
+from models.engine.database import session
 
 class Section(Base):
     __tablename__ = 'section'
@@ -27,6 +28,38 @@ class ProjectManagers(Base):
 
     def __repr__(self):
         return f"ProjectManagers({self.name}, {self.section})"
+    
+    @classmethod
+    def project_managers_to_dict_list(cls, section_name=None):
+        """
+        Convert SQLAlchemy query results into a list of dictionaries.
+        Exclude the _sa_instance_state attribute.
+        
+        Args:
+            section_name (str, optional): Name of the section to filter project managers. Defaults to None.
+        
+        Returns:
+            list: A list of dictionaries containing project managers.
+        """
+        try:
+            if section_name:
+                project_managers = session.query(cls).filter(cls.section == section_name).all()
+            else:
+                project_managers = session.query(cls).all()
+        except:
+            session.rollback()
+        finally:
+            session.close()
+        
+        result_list = []
+        for row in project_managers:
+            result_dict = {}
+            for column in row.__table__.columns:
+                result_dict[column.name] = getattr(row, column.name)
+            result_list.append(result_dict)
+        
+        return result_list
+    
 
 class ContractType(Base):
     __tablename__ = 'contract_type'
@@ -36,9 +69,28 @@ class ContractType(Base):
 
     def __init__(self, name):
         self.name = name
-
+        
     def __repr__(self):
         return f"ContractType({self.name})"
+    
+    
+    @classmethod
+    def contract_type_data_dict(cls, contract_type_id):
+        """
+        Filters and returns project data for a specific contract type id.
+
+        Args:
+        contract_type_id (int): The contract type id to filter by.
+
+        Returns:
+        list: A list of dictionaries containing project data for the specified contract type,
+            or an empty list if no data is found.
+        """ 
+
+        servicing_data = projects_data_to_dict_list()
+        filtered_data = [row for row in servicing_data if 'contract_type_id' in row and row['contract_type_id'] == contract_type_id]
+        return filtered_data
+    
 
 class ProjectsData(Base):
     __tablename__ = 'projects_data'
@@ -78,3 +130,47 @@ class ProjectsData(Base):
     contract_type = relationship("ContractType")
     project_manager = relationship("ProjectManagers")
     section = relationship("Section")
+     
+    
+def projects_data_to_dict_list(contract_type_id=None):
+    """
+    Convert SQLAlchemy query results into a list of dictionaries.
+    Exclude the _sa_instance_state attribute.
+    
+    Args:
+        contract_type_id (str, optional): Filter results by contract_type_id.
+        Defaults to None.
+    
+    Returns:
+        list: A list of dictionaries containing projects data with related data
+        from ContractType, ProjectManagers, and Section.
+    """
+    try:
+        query = session.query(ProjectsData) \
+        .join(ProjectsData.contract_type) \
+        .join(ProjectsData.project_manager) \
+        .join(ProjectsData.section)
+    except:
+        session.rollback()
+    finally:
+        session.close()
+    
+    if contract_type_id:
+        query = query.filter(ProjectsData.contract_type_id == contract_type_id)
+    
+    projects_data = query.all()
+    
+    result_list = []
+    for row in projects_data:
+        result_dict = {}
+        for column in row.__table__.columns:
+            result_dict[column.name] = getattr(row, column.name)
+        
+        result_dict['contract_type'] = row.contract_type.name
+        result_dict['project_manager'] = row.project_manager.name
+        result_dict['section'] = row.section.name
+        
+        result_list.append(result_dict)
+    
+    sorted_result_list = sorted(result_list, key=lambda x: x["id"])
+    return sorted_result_list

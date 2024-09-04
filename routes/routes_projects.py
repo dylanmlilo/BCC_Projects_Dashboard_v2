@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, abort, jsonify, request, redirect, url_for, flash
-from models.engine.database import session, projects_data_to_dict_list, project_managers_to_dict_list
+from models.engine.database import session
 from models.plot_functions import today_date
-from models.projects import ProjectsData, ProjectManagers
+from models.projects import ProjectsData, ProjectManagers, ContractType, projects_data_to_dict_list
 
 
 projects_bp = Blueprint('projects', __name__)
@@ -22,7 +22,7 @@ def projects_data():
 
     """
     projects_data = projects_data_to_dict_list()
-    project_managers = project_managers_to_dict_list()
+    project_managers = ProjectManagers.project_managers_to_dict_list()
     formatted_date = today_date()
     return render_template("projects_data.html", today_date=formatted_date,
                            projects_data=projects_data, project_managers=project_managers)

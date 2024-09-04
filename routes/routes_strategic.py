@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_required
 from models.plot_functions import today_date
-from models.engine.database import session, strategic_tasks_to_dict_list, project_managers_to_dict_list
+from models.engine.database import session
 from models.strategic import StrategicTask
+from models.projects import ProjectManagers
 
 
 strategic_bp = Blueprint('strategic', __name__)
@@ -23,7 +24,7 @@ def strategic_planning():
     - Rendered template "strategic_planning.html" with today's date and strategic data list.
 
     """
-    strategic_data_list = strategic_tasks_to_dict_list()
+    strategic_data_list = StrategicTask.strategic_tasks_to_dict_list()
     formatted_date = today_date()
     return render_template("strategic_planning.html", today_date=formatted_date, 
                            strategic_data_list=strategic_data_list)
@@ -44,8 +45,8 @@ def strategic_planning_data():
     - Rendered template "strategic_planning.html" with strategic data list.
     """
     formatted_date = today_date()
-    strategic_data_list = strategic_tasks_to_dict_list()
-    project_managers = project_managers_to_dict_list("strategic planning")
+    strategic_data_list = StrategicTask.strategic_tasks_to_dict_list()
+    project_managers = ProjectManagers.project_managers_to_dict_list("strategic planning")
     return render_template("strategic_planning_data.html", strategic_data_list=strategic_data_list,
                            today_date=formatted_date, project_managers=project_managers)
 

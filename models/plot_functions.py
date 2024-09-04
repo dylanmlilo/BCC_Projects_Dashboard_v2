@@ -4,8 +4,8 @@ import json
 import plotly
 import plotly_express as px
 import plotly.graph_objects as go
-from models.engine.database import session, projects_data_to_dict_list, contract_type_data_dict
-from models.projects import ProjectsData, ContractType, Section, ProjectManagers
+from models.engine.database import session
+from models.projects import ProjectsData, ContractType, Section, ProjectManagers, projects_data_to_dict_list
 from datetime import datetime, timedelta
 
 
@@ -173,7 +173,7 @@ def plot_servicing_page_charts():
       list: A list of JSON strings representing the Plotly charts, one for each project.
   """  
 
-  servicing_data = contract_type_data_dict(1)
+  servicing_data = ContractType.contract_type_data_dict(1)
   servicing_charts = []
 
   if not servicing_data:

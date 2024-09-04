@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template
 from flask_login import login_required
 from models.plot_functions import today_date
-from models.gis import gis_data_to_dict_list, ResponsiblePerson, Output, Activity, gis_data_to_responsible_person, gis_task_data_to_dict_list
+from models.gis import gis_data_to_dict_list, ResponsiblePerson, Output, Activity, Task
 from models.plot_functions import today_date
 
 
@@ -23,11 +23,10 @@ def gis():
 
     """
     gis_data = gis_data_to_dict_list()
-    responsible_persons = gis_data_to_responsible_person()
+
     formatted_date = today_date()
     return render_template("gis.html", today_date=formatted_date,
-                           gis_data=gis_data,
-                           responsible_persons=responsible_persons)
+                           gis_data=gis_data)
 
 
 @gis_data_bp.route("/GIS_data", strict_slashes=False)
@@ -49,7 +48,7 @@ def gis_data():
     gis_output_data = Output.gis_output_data_to_dict_list()
     gis_activity_data = Activity.gis_activity_data_to_dict_list()
     gis_responsible_person_data = ResponsiblePerson.gis_responsible_person_data_to_dict_list()
-    gis_task_data = gis_task_data_to_dict_list()
+    gis_task_data = Task.gis_task_data_to_dict_list()
     formatted_date = today_date()
     return render_template("gis_data.html", today_date=formatted_date,
                            gis_data=gis_data, gis_output_data=gis_output_data,

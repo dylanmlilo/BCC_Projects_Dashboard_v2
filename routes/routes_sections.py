@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from models.engine.database import projects_data_to_dict_list
+from models.projects import projects_data_to_dict_list
 from models.plot_functions import today_date, plot_servicing_page_charts
 
 

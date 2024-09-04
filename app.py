@@ -55,8 +55,9 @@ def load_user(user_id):
     """
     try:
         user = session.query(Users).get(int(user_id))
-    except:
+    except Exception as e:
         session.rollback()
+        print(f"An error occurred: {e}")
     finally:
         session.close()
     return user
