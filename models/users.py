@@ -13,15 +13,21 @@ class Users(Base, UserMixin):
     - password (String): The password of the user.
     - email (String): The email of the user (unique).
     """
-    
+
     __tablename__ = 'users'
-    
+
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
     username = Column(String(50), unique=True)
     password = Column(String(50))
     email = Column(String(50), unique=True)
 
-    def __repr__(self):
-        return "<Users(name='%s', username='%s', password='%s', email='%s')>" % (self.name, self.username, self.password, self.email)
-
+    def __repr__(self) -> str:
+        """Returns a string representation of the User object."""
+        return (
+            f"<Users("
+            f"name='{self.name}', "
+            f"username='{self.username}', "
+            f"email='{self.email}'"
+            f")>"
+        )

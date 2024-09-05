@@ -3,9 +3,10 @@ from sqlalchemy.orm import relationship
 from models.base import Base
 from models.engine.database import session
 
+
 class Section(Base):
     __tablename__ = 'section'
-    
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100))
 
@@ -15,9 +16,10 @@ class Section(Base):
     def __repr__(self):
         return f"Section({self.name})"
 
+
 class ProjectManagers(Base):
     __tablename__ = 'project_managers'
-    
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100))
     section = Column(String(100))
@@ -28,73 +30,84 @@ class ProjectManagers(Base):
 
     def __repr__(self):
         return f"ProjectManagers({self.name}, {self.section})"
-    
+
     @classmethod
     def project_managers_to_dict_list(cls, section_name=None):
         """
         Convert SQLAlchemy query results into a list of dictionaries.
         Exclude the _sa_instance_state attribute.
-        
+
         Args:
-            section_name (str, optional): Name of the section to filter project managers. Defaults to None.
-        
+            section_name (str, optional): Name of the section to
+            filter project managers. Defaults to None.
+
         Returns:
             list: A list of dictionaries containing project managers.
         """
         try:
-            if section_name:
-                project_managers = session.query(cls).filter(cls.section == section_name).all()
-            else:
-                project_managers = session.query(cls).all()
-        except:
+            query_filter = (cls.section == section_name if section_name
+                            else True)
+            project_managers = session.query(cls).filter(query_filter).all()
+        except Exception as e:
             session.rollback()
+            print(f"An error occurred: {e}")
         finally:
             session.close()
-        
+
         result_list = []
         for row in project_managers:
             result_dict = {}
             for column in row.__table__.columns:
                 result_dict[column.name] = getattr(row, column.name)
             result_list.append(result_dict)
-        
         return result_list
-    
+
 
 class ContractType(Base):
     __tablename__ = 'contract_type'
-    
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100))
 
     def __init__(self, name):
         self.name = name
-        
+
     def __repr__(self):
         return f"ContractType({self.name})"
-    
-    
+
     @classmethod
-    def contract_type_data_dict(cls, contract_type_id):
+    def contract_type_data_dict(cls, contract_type_id: int) -> list[dict]:
         """
         Filters and returns project data for a specific contract type id.
 
         Args:
-        contract_type_id (int): The contract type id to filter by.
+            contract_type_id: The contract type id to filter by.
 
         Returns:
-        list: A list of dictionaries containing project data for the specified contract type,
-            or an empty list if no data is found.
-        """ 
+            A list of dictionaries containing project data
+            for the specified contract type.
+            If no data is found, an empty list is returned.
+        """
+        if not isinstance(contract_type_id, int) or contract_type_id <= 0:
+            raise ValueError("Invalid contract_type_id")
 
-        servicing_data = projects_data_to_dict_list()
-        filtered_data = [row for row in servicing_data if 'contract_type_id' in row and row['contract_type_id'] == contract_type_id]
+        try:
+            data = projects_data_to_dict_list()
+        except Exception as e:
+            print(f"Error retrieving data: {e}")
+            return []
+
+        filtered_data = [
+            row
+            for row in data
+            if row.get('contract_type_id') == contract_type_id
+        ]
         return filtered_data
-    
+
 
 class ProjectsData(Base):
     __tablename__ = 'projects_data'
-    
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     contract_number = Column(String(50), nullable=False)
     contract_name = Column(Text)
@@ -126,51 +139,54 @@ class ProjectsData(Base):
     physical_progress_percentage = Column(DECIMAL(10, 2))
     tax_clearance_validation = Column(String(50))
     link = Column(String(255))
-    
+
     contract_type = relationship("ContractType")
     project_manager = relationship("ProjectManagers")
     section = relationship("Section")
-     
-    
+
+
 def projects_data_to_dict_list(contract_type_id=None):
     """
     Convert SQLAlchemy query results into a list of dictionaries.
     Exclude the _sa_instance_state attribute.
-    
+
     Args:
         contract_type_id (str, optional): Filter results by contract_type_id.
         Defaults to None.
-    
+
     Returns:
         list: A list of dictionaries containing projects data with related data
         from ContractType, ProjectManagers, and Section.
     """
     try:
-        query = session.query(ProjectsData) \
-        .join(ProjectsData.contract_type) \
-        .join(ProjectsData.project_manager) \
-        .join(ProjectsData.section)
-    except:
+        query = (
+            session.query(ProjectsData)
+            .join(ProjectsData.contract_type)
+            .join(ProjectsData.project_manager)
+            .join(ProjectsData.section)
+        )
+    except Exception as e:
         session.rollback()
+        print(f"An error occurred: {e}")
     finally:
         session.close()
-    
+
     if contract_type_id:
         query = query.filter(ProjectsData.contract_type_id == contract_type_id)
-    
+
     projects_data = query.all()
-    
+
     result_list = []
     for row in projects_data:
         result_dict = {}
         for column in row.__table__.columns:
             result_dict[column.name] = getattr(row, column.name)
-        
+
         result_dict['contract_type'] = row.contract_type.name
         result_dict['project_manager'] = row.project_manager.name
         result_dict['section'] = row.section.name
-        
+
         result_list.append(result_dict)
-    
+
     sorted_result_list = sorted(result_list, key=lambda x: x["id"])
     return sorted_result_list
