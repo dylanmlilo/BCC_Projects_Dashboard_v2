@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String
 from flask_login import UserMixin
 from models.base import Base
-# Base.metadata.create_all(engine)
 
 
 class Users(Base, UserMixin):
@@ -21,6 +20,13 @@ class Users(Base, UserMixin):
     username = Column(String(50), unique=True)
     password = Column(String(50))
     email = Column(String(50), unique=True)
+
+    def __init__(self, name, username, password, email) -> None:
+        """Initialising a new user"""
+        self.name = name
+        self.username = username
+        self.password = password
+        self.email = email
 
     def __repr__(self) -> str:
         """Returns a string representation of the User object."""

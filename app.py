@@ -54,7 +54,7 @@ def load_user(user_id):
         Users or None: The user object if found, None otherwise.
     """
     try:
-        user = session.query(Users).get(int(user_id))
+        user = session.get(Users, int(user_id))
     except Exception as e:
         session.rollback()
         print(f"An error occurred: {e}")
