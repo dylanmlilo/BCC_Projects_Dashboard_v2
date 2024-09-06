@@ -12,7 +12,8 @@ def insert_gis_output_data():
     Inserts the gis data into the database and redirects to the gis data page.
 
     Returns:
-        flask.Response: A redirect response to the  dagista page or a JSON response with an error message.
+        flask.Response: A redirect response to the
+        dagista page or a JSON response with an error message.
     """
     if request.method == 'POST':
         try:
@@ -32,18 +33,22 @@ def insert_gis_output_data():
             session.close()
 
 
-@gis_output_bp.route("/update_gis_output_data/<int:gis_output_data_id>", methods=['POST'])
+@gis_output_bp.route("/update_gis_output_data/<int:gis_output_data_id>",
+                     methods=['POST'])
 def update_gis_output_data(gis_output_data_id):
     """
     Updates the gis data into the database and redirects to the gis data page.
 
     Returns:
-        flask.Response: A redirect response to the  dagista page or a JSON response with an error message.
+        flask.Response: A redirect response to the
+        dagista page or a JSON response with an error message.
     """
     if request.method == 'POST':
         try:
 
-            output = session.query(Output).filter_by(id=gis_output_data_id).first()
+            output = (session.query(Output)
+                      .filter_by(id=gis_output_data_id)
+                      .first())
             if output:
                 output.name = request.form.get('output_name')
 
@@ -59,13 +64,14 @@ def update_gis_output_data(gis_output_data_id):
             session.close()
 
 
-@gis_output_bp.route("/delete_gis_output_data/<int:gis_output_data_id>", methods=['POST', 'GET'])
+@gis_output_bp.route("/delete_gis_output_data/<int:gis_output_data_id>")
 def delete_gis_output_data(gis_output_data_id):
     """
     Deletes the gis data from the database and redirects to the gis data page.
 
     Returns:
-        flask.Response: A redirect response to the  dagista page or a JSON response with an error message.
+        flask.Response: A redirect response to the
+        dagista page or a JSON response with an error message.
     """
     try:
         output = session.query(Output).filter_by(id=gis_output_data_id).first()

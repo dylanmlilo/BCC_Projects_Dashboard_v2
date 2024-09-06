@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user
 from models.users import Users
 from models.login import LoginForm
 from models.engine.database import session
@@ -17,9 +17,11 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         try:
-            user = session.query(Users).filter_by(username=form.username.data).first()
-        except:
+            user = (session.query(Users)
+                    .filter_by(username=form.username.data).first())
+        except Exception as e:
             session.rollback()
+            print("Error:", e)
         finally:
             session.close()
         if user and user.password == form.password.data:
@@ -40,5 +42,3 @@ def logout():
     """
     logout_user()
     return redirect(url_for('login.login'))
-
-

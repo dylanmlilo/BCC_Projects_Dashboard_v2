@@ -9,9 +9,11 @@ sections_bp = Blueprint('sections', __name__)
 @sections_bp.route("/Servicing", strict_slashes=False)
 def servicing():
     """
-    Renders the 'servicing.html' template with project data for servicing contracts.
+    Renders the 'servicing.html' template with project
+    data for servicing contracts.
 
-    This function fetches project data for servicing contracts, generates a bar chart,
+    This function fetches project data for servicing contracts,
+    generates a bar chart,
     and renders the 'servicing.html' template with the necessary data.
 
     Returns:
@@ -30,7 +32,8 @@ def goods():
     """
     Function to handle /Goods route.
 
-    Retrieves projects data and today's date, then renders the goods.html template.
+    Retrieves projects data and today's date,
+    then renders the goods.html template.
 
     Parameters:
     - None
@@ -41,7 +44,7 @@ def goods():
     """
     projects_data = projects_data_to_dict_list(3)
     formatted_date = today_date()
-    return render_template("goods.html", today_date=formatted_date, 
+    return render_template("goods.html", today_date=formatted_date,
                            projects_data=projects_data)
 
 
@@ -50,14 +53,14 @@ def works():
     """
     Function to handle works data retrieval and rendering.
 
-    Retrieves projects data and today's date, then renders the works.html template.
+    Retrieves projects data and today's date,
+    then renders the works.html template.
 
     Parameters:
     - None
 
     Returns:
     - Rendered template "works.html" with today's date and projects data.
-
     """
     projects_data = projects_data_to_dict_list(4)
     formatted_date = today_date()
@@ -70,7 +73,8 @@ def services():
     """
     Function to handle Services route.
 
-    Retrieves projects data and today's date, then renders the services.html template.
+    Retrieves projects data and today's date,
+    then renders the services.html template.
 
     Parameters:
     - None

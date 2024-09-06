@@ -12,7 +12,8 @@ def insert_gis_activity_data():
     Inserts the gis data into the database and redirects to the gis data page.
 
     Returns:
-        flask.Response: A redirect response to the  dagista page or a JSON response with an error message.
+        flask.Response: A redirect response to the
+        dagista page or a JSON response with an error message.
     """
     if request.method == 'POST':
         try:
@@ -20,8 +21,10 @@ def insert_gis_activity_data():
             output_id = request.form.get('output_id')
             responsible_person_id = request.form.get('responsible_person_id')
 
-
-            new_activity = Activity(activity=activity, output_id=output_id, responsible_person_id=responsible_person_id)
+            new_activity = Activity(
+                activity=activity,
+                output_id=output_id,
+                responsible_person_id=responsible_person_id)
             session.add(new_activity)
             session.commit()
             flash('Data inserted successfully')
@@ -35,22 +38,30 @@ def insert_gis_activity_data():
             session.close()
 
 
-@gis_activity_bp.route("/update_gis_activity_data/<int:gis_activity_data_id>", methods=['POST'])
+@gis_activity_bp.route("/update_gis_activity_data/<int:gis_activity_data_id>",
+                       methods=['POST'])
 def update_gis_activity_data(gis_activity_data_id):
     """
     Updates the gis data into the database and redirects to the gis data page.
 
     Returns:
-        flask.Response: A redirect response to the  dagista page or a JSON response with an error message.
+        flask.Response: A redirect response to the
+        dagista page or a JSON response with an error message.
     """
     if request.method == 'POST':
         try:
 
-            activity = session.query(Activity).filter_by(id=gis_activity_data_id).first()
+            activity = (
+                session.query(Activity)
+                .filter_by(id=gis_activity_data_id)
+                .first()
+                )
             if activity:
                 activity.activity = request.form.get('activity_name')
                 activity.output_id = request.form.get('output_id')
-                activity.responsible_person_id = request.form.get('responsible_person_id')
+                activity.responsible_person_id = (
+                    request.form.get('responsible_person_id')
+                    )
 
                 session.commit()
                 flash('Data updated successfully')
@@ -64,16 +75,19 @@ def update_gis_activity_data(gis_activity_data_id):
             session.close()
 
 
-@gis_activity_bp.route("/delete_gis_activity_data/<int:gis_activity_data_id>", methods=['POST', 'GET'])
+@gis_activity_bp.route("/delete_gis_activity_data/<int:gis_activity_data_id>",)
 def delete_gis_activity_data(gis_activity_data_id):
     """
     Deletes the gis data from the database and redirects to the gis data page.
 
     Returns:
-        flask.Response: A redirect response to the  dagista page or a JSON response with an error message.
+        flask.Response: A redirect response to the
+        dagista page or a JSON response with an error message.
     """
     try:
-        activity = session.query(Activity).filter_by(id=gis_activity_data_id).first()
+        activity = (
+            session.query(Activity).filter_by(id=gis_activity_data_id).first()
+            )
         if activity:
             session.delete(activity)
             session.commit()

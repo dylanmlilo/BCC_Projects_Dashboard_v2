@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from flask import (
+    Blueprint, render_template, request, redirect, url_for, flash, jsonify
+    )
 from flask_login import login_required
 from models.plot_functions import today_date
 from models.engine.database import session
@@ -9,24 +11,26 @@ from models.projects import ProjectManagers
 strategic_bp = Blueprint('strategic', __name__)
 
 
-
 @strategic_bp.route("/StrategicPlanning", strict_slashes=False)
 def strategic_planning():
     """
     Function to handle Strategic Planning route.
 
-    Retrieves strategic data list and today's date, then renders the strategic_planning.html template.
+    Retrieves strategic data list and today's date,
+    then renders the strategic_planning.html template.
 
     Parameters:
     - None
 
     Returns:
-    - Rendered template "strategic_planning.html" with today's date and strategic data list.
+    - Rendered template "strategic_planning.html"
+    with today's date and strategic data list.
 
     """
     strategic_data_list = StrategicTask.strategic_tasks_to_dict_list()
     formatted_date = today_date()
-    return render_template("strategic_planning.html", today_date=formatted_date, 
+    return render_template("strategic_planning.html",
+                           today_date=formatted_date,
                            strategic_data_list=strategic_data_list)
 
 
@@ -36,7 +40,8 @@ def strategic_planning_data():
     """
     Function to handle Strategic Planning data route.
 
-    Retrieves strategic data list and renders the strategic_planning.html template.
+    Retrieves strategic data list and renders
+    the strategic_planning.html template.
 
     Parameters:
     - None
@@ -46,9 +51,13 @@ def strategic_planning_data():
     """
     formatted_date = today_date()
     strategic_data_list = StrategicTask.strategic_tasks_to_dict_list()
-    project_managers = ProjectManagers.project_managers_to_dict_list("strategic planning")
-    return render_template("strategic_planning_data.html", strategic_data_list=strategic_data_list,
-                           today_date=formatted_date, project_managers=project_managers)
+    project_managers = (
+        ProjectManagers.project_managers_to_dict_list("strategic planning")
+        )
+    return render_template("strategic_planning_data.html",
+                           strategic_data_list=strategic_data_list,
+                           today_date=formatted_date,
+                           project_managers=project_managers)
 
 
 @strategic_bp.route("/insert_strategic_data", methods=['POST'])
@@ -57,7 +66,8 @@ def insert_strategic_data():
     """
     Function to handle insert strategic data route.
 
-    Retrieves strategic data list and renders the strategic_planning.html template.
+    Retrieves strategic data list and renders
+    the strategic_planning.html template.
 
     Parameters:
     - None
@@ -93,32 +103,37 @@ def insert_strategic_data():
             if actual_hours == '':
                 actual_hours = None
 
-
-            new_task = StrategicTask(task=task, description=description, deliverables=deliverables, 
-                            assigned_to=assigned_to, deadline=deadline, status=status, 
-                            priority=priority, percentage_done=percentage_done, 
-                            fixed_cost=fixed_cost, estimated_hours=estimated_hours, 
-                            actual_hours=actual_hours)
+            new_task = StrategicTask(task=task, description=description,
+                                     deliverables=deliverables,
+                                     assigned_to=assigned_to,
+                                     deadline=deadline, status=status,
+                                     priority=priority,
+                                     percentage_done=percentage_done,
+                                     fixed_cost=fixed_cost,
+                                     estimated_hours=estimated_hours,
+                                     actual_hours=actual_hours)
             session.add(new_task)
             session.commit()
             flash('Data inserted successfully')
             return redirect(url_for('strategic.strategic_planning_data'))
-        
+
         except Exception as e:
             session.rollback()
             return jsonify({'error': str(e)}), 400
-        
+
         finally:
             session.close()
 
 
-@strategic_bp.route("/update_strategic_data/<int:strategic_data_id>", methods=['POST'])
+@strategic_bp.route(
+    "/update_strategic_data/<int:strategic_data_id>", methods=['POST'])
 @login_required
 def update_strategic_data(strategic_data_id):
     """
     Function to handle update strategic data route.
 
-    Retrieves strategic data list and renders the strategic_planning.html template.
+    Retrieves strategic data list and renders
+    the strategic_planning.html template.
 
     Parameters:
     - None
@@ -128,7 +143,8 @@ def update_strategic_data(strategic_data_id):
     """
     if request.method == 'POST':
         try:
-            task = session.query(StrategicTask).filter_by(task_id=strategic_data_id).first()
+            task = (session.query(StrategicTask)
+                    .filter_by(task_id=strategic_data_id).first())
             if task:
                 task.task = request.form.get('task')
                 task.description = request.form.get('description')
@@ -174,7 +190,8 @@ def delete_strategic_data(strategic_data_id):
     """
     Function to handle delete strategic data route.
 
-    Retrieves strategic data list and renders the strategic_planning.html template.
+    Retrieves strategic data list and renders the
+    strategic_planning.html template.
 
     Parameters:
     - None
@@ -183,7 +200,8 @@ def delete_strategic_data(strategic_data_id):
     - Rendered template "strategic_planning.html" with strategic data list.
     """
     try:
-        task = session.query(StrategicTask).filter_by(task_id=strategic_data_id).first()
+        task = (session.query(StrategicTask)
+                .filter_by(task_id=strategic_data_id).first())
         if task:
             session.delete(task)
             session.commit()
