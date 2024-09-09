@@ -6,6 +6,8 @@ from models.gis import (
     Output, Activity, Task
 )
 from models.plot_functions import today_date
+from itertools import groupby
+import pandas as pd
 
 
 gis_data_bp = Blueprint('gis_data', __name__)
@@ -27,11 +29,14 @@ def gis():
     progress data, and responsible persons.
 
     """
-    gis_data = gis_data_to_dict_list()
-
     formatted_date = today_date()
-    return render_template("gis.html", today_date=formatted_date,
-                           gis_data=gis_data)
+    gis_data = gis_data_to_dict_list()
+    
+    
+    gis_data_grouped = []
+    for key, group in groupby(gis_data, key=lambda x: x["output_name"]):
+        gis_data_grouped.append((key, list(group)))
+    return render_template("gis.html", today_date=formatted_date, gis_data_grouped=gis_data_grouped)
 
 
 @gis_data_bp.route("/GIS_data", strict_slashes=False)

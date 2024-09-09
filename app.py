@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_login import LoginManager
 from models.engine.database import session
 from models.users import Users
@@ -16,6 +16,7 @@ from routes.routes_APIs import api_bp
 from routes.routes_admin_dashboard import admin_dashboard_bp
 import os
 from dotenv import load_dotenv
+from itertools import groupby
 
 
 load_dotenv()
@@ -61,6 +62,24 @@ def load_user(user_id):
     finally:
         session.close()
     return user
+
+
+# Sample data
+gis_data = [
+    {"output_name": "Output 1", "activity": "Activity 1", "task_description": "Task 1", "responsible_person": "Person 1", "designation": "Designation 1"},
+    {"output_name": "Output 1", "activity": "Activity 2", "task_description": "Task 2", "responsible_person": "Person 2", "designation": "Designation 2"},
+    {"output_name": "Output 2", "activity": "Activity 3", "task_description": "Task 3", "responsible_person": "Person 3", "designation": "Designation 3"},
+    {"output_name": "Output 2", "activity": "Activity 4", "task_description": "Task 4", "responsible_person": "Person 4", "designation": "Designation 4"},
+    {"output_name": "Output 3", "activity": "Activity 5", "task_description": "Task 5", "responsible_person": "Person 5", "designation": "Designation 5"}
+]
+
+@app.route("/test")
+def index():
+    # Group consecutive rows by output_name
+    gis_data_grouped = []
+    for key, group in groupby(gis_data, key=lambda x: x["output_name"]):
+        gis_data_grouped.append((key, list(group)))
+    return render_template("test.html", gis_data_grouped=gis_data_grouped)
 
 
 if __name__ == "__main__":

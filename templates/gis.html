@@ -34,26 +34,26 @@
             </thead>
 
             <tbody>
-            {% for gis_data in gis_data %}
-            <tr class="table-light">
-                <td>{{ gis_data.output_name or '' }}</td>
-                <td>{{ gis_data.activity or '' }}</td>
-                <td>{{ gis_data.task_description or '' }}</td>
-                <td>{{ gis_data.responsible_person or ''}}</td>
-                <td>{{ gis_data.designation or '' }}</td>
-            {% endfor %}
-        </tbody>
+                {% for output_name, group in gis_data_grouped %}
+                    <tr class="table-light">
+                        <td rowspan="{{ group|length }}">{{ output_name }}</td>
+                        <td>{{ group[0].activity }}</td>
+                        <td>{{ group[0].task_description }}</td>
+                        <td>{{ group[0].responsible_person }}</td>
+                        <td>{{ group[0].designation }}</td>
+                    </tr>
+                    {% for data in group[1:] %}
+                        <tr class="table-light" style="border-top: none;">
+                            <td>{{ data.activity }}</td>
+                            <td>{{ data.task_description }}</td>
+                            <td>{{ data.responsible_person }}</td>
+                            <td>{{ data.designation }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
         </table>
     </div>
-    
-    <!-- <div id="progress-container" class="graph-container"></div>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script>
-        // Load area plots
-        var graph1Data = {{ progress_data | safe }};
-        Plotly.newPlot('progress-container', graph1Data, { responsive: true });
-    </script> -->
-
 </div>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -61,17 +61,4 @@
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
 <script src="https://cdn.datatables.net/inline-rows/2.0.8/inline-rows.js"></script>
-<script>
-  $(document).ready(function() {
-      $('#gis_table').DataTable({
-          // "paging": true, // Disable pagination for inline editing
-          // "ordering": false, // Disable sorting for inline editing
-          // "info": false, // Disable info display for inline editing
-          // "scrollY": '50vh', // Set a fixed height for vertical scrolling
-          // "scrollCollapse": true, // Enable scrolling
-          // "scrollX": true, // Enable horizontal scrolling
-          // "autoWidth": false // Disable automatic column width calculation
-      });
-  });
-</script>
 {% endblock%}

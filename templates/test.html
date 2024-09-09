@@ -1,0 +1,53 @@
+{% extends 'index.html' %}
+
+
+{% block content %}
+
+<div class="stats_data_container">
+    <table class="table table-hover table-bordered table-striped" >
+        <thead>
+            <tr class="table-dark">
+                <th>OUT PUT</th>
+                <th>
+                    ACTIVITY<br>
+                    Activities add up
+                    to 100% of the
+                    Output
+                </th>
+                <th>
+                    TASK<br>
+                    Tasks add up to 100%
+                    of the Activity
+                </th>
+                <th>
+                    RESPONSIBLE
+                    OFFICER/PERSON<br>
+                    Names of Responsible
+                    People in Full
+                </th>
+                <th>DESIGNATION</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for output_name, group in gis_data_grouped %}
+                <tr class="table-light">
+                    <td rowspan="{{ group|length }}">{{ output_name }}</td>
+                    <td>{{ group[0].activity }}</td>
+                    <td>{{ group[0].task_description }}</td>
+                    <td>{{ group[0].responsible_person }}</td>
+                    <td>{{ group[0].designation }}</td>
+                </tr>
+                {% for data in group[1:] %}
+                    <tr class="table-light" style="border-top: none;">
+                        <td>{{ data.activity }}</td>
+                        <td>{{ data.task_description }}</td>
+                        <td>{{ data.responsible_person }}</td>
+                        <td>{{ data.designation }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock%}
