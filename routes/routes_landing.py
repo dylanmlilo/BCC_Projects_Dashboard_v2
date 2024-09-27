@@ -9,10 +9,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-login_bp = Blueprint('login', __name__)
+landing_bp = Blueprint('landing', __name__)
 
 
-@login_bp.route('/', strict_slashes=False, methods=['GET', 'POST'])
+@landing_bp.route('/', strict_slashes=False, methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -29,10 +29,10 @@ def login():
             return redirect(url_for('home.index'))
         else:
             flash('Invalid username or password', 'error')
-    return render_template('login.html', form=form)
+    return render_template('landing.html', form=form)
 
 
-@login_bp.route('/logout', strict_slashes=False)
+@landing_bp.route('/logout', strict_slashes=False)
 def logout():
     """
     Logs out the current user and redirects to the login page.
@@ -41,4 +41,9 @@ def logout():
         flask.Response: A redirect response to the login page.
     """
     logout_user()
-    return redirect(url_for('login.login'))
+    return redirect(url_for('landing.login'))
+
+
+@landing_bp.route("/denied_access", strict_slashes=False)
+def denied_access():
+    return render_template("denied_access.html")

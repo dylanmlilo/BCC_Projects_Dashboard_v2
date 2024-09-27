@@ -12,7 +12,7 @@ from routes.routes_gis_output import gis_output_bp
 from routes.routes_gis_activity import gis_activity_bp
 from routes.routes_projects import projects_bp
 from routes.routes_sections import sections_bp
-from routes.routes_login import login_bp
+from routes.routes_landing import landing_bp
 from routes.routes_APIs import api_bp
 from routes.routes_admin_dashboard import admin_dashboard_bp
 import os
@@ -33,7 +33,7 @@ app.register_blueprint(gis_output_bp)
 app.register_blueprint(gis_activity_bp)
 app.register_blueprint(projects_bp)
 app.register_blueprint(sections_bp)
-app.register_blueprint(login_bp)
+app.register_blueprint(landing_bp)
 app.register_blueprint(api_bp)
 app.register_blueprint(admin_dashboard_bp)
 app.secret_key = os.getenv("SECRET_KEY")

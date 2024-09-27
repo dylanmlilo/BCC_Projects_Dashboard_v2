@@ -23,6 +23,38 @@
     font-size: 3rem;
 }
 
+
+.landing_container {
+    background: url("../images/stp.jpg") no-repeat center;
+}
+
+.landing_flex {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 10px;
+}
+
+
+.landing-heading {
+    text-align: center;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    width: 100%;
+    padding-top: 20px;
+}
+
+.landing-heading h1 {
+    font-size: 4rem;
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
+    padding-top: 50px;
+}
+
+.landing-heading h2 {
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
+    font-size: 3rem;
+}
+
 .stats_data_container {
     background: rgba(107, 109, 109, 0.712);
     margin-top: 100px;
@@ -107,10 +139,21 @@ h3 {
 .stats-container {
     height: 400px;
     text-align: center;
-    background: url("../images/excavator.jpg") no-repeat center;
     padding-top: 80px;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     text-shadow: 4px 4px 16px #000
+}
+
+.stats-container.serviving {
+    background: url("../images/excavator1920.jpg") no-repeat center;
+}
+
+.stats-container.goods {
+    background: url("../images/goods1900.jpg") no-repeat center;
+}
+
+.stats-container.gis{
+    background: url("../images/drone1920.jpg") no-repeat center;
 }
 
 .stats-container h1 {
@@ -208,7 +251,7 @@ h3 {
     margin: 20px 5px;
 }
 
-.login_container, .admin_dashboard {
+.login_container, .admin_dashboard, .denied_access_container {
     background: linear-gradient(to top left, rgb(23, 133, 161) 50%, rgb(142, 149, 150) 50%);
     width: 80%;
     height: 350px;
@@ -219,7 +262,8 @@ h3 {
   }
 
 .login_container {
-    height: 350px;
+    height: 500px;
+    margin-left: 20px;
 }
 
 .admin_dashboard {
@@ -238,8 +282,24 @@ h3 {
     margin: 0 8px;
 }
 
-.login_container h1, .admin_dashboard h1 {
+.login_container h1  {
+    padding-top: 60px;
+}
+
+.admin_dashboard h1 {
     padding-top: 25px;
+}
+
+.denied_access_title {
+    font-size: 3rem;
+    padding-top: 100px;
+    text-shadow: 1px 1px 2px #000;
+    color: red;
+}
+
+.denied_access_button {
+    margin-top: 20px;
+    font-size: 4rem;
 }
 
 .gis_image {
@@ -337,9 +397,9 @@ h3 {
         background: url("../images/strats480.jpg") no-repeat;
     }
 
-    .stats-container.gis{
+    /* .stats-container.gis{
     background: url("../images/gis610.jpg") no-repeat;
-    }
+    } */
 
     .stats-container h1 {
         font-size: 3.4rem;
@@ -429,9 +489,9 @@ h3 {
         background: url("../images/strats610.jpg") no-repeat;
     }
 
-    .stats-container.gis{
+    /* .stats-container.gis{
         background: url("../images/gis610.jpg") no-repeat;
-    }
+    } */
 
     .stats_data_container {
         width: 95%;
@@ -498,9 +558,9 @@ h3 {
         background: url("../images/strats991.jpg") no-repeat;
     }
 
-    .stats-container.gis{
+    /* .stats-container.gis{
         background: url("../images/gis991.jpg") no-repeat;
-    }
+    } */
 
     .stats_data_container {
         width: 95%;
@@ -543,9 +603,9 @@ h3 {
         background: url("../images/strats1500.jpg") no-repeat;
     }
 
-    .stats-container.gis{
+    /* .stats-container.gis{
         background: url("../images/gis1500.jpg") no-repeat;
-    }
+    } */
 
     .stats-container h1 {
         font-size: 5rem;
@@ -593,7 +653,7 @@ h3 {
         background: url("../images/strats2.jpg") no-repeat;
     }
 
-    .stats-container.gis{
+    /* .stats-container.gis{
         background: url("../images/gis2500.jpg") no-repeat;
-    }
+    } */
 }

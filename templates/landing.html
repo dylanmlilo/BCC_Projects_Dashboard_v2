@@ -1,0 +1,77 @@
+{% extends "index.html" %}
+
+{% block nav %}
+  {% include 'nav.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="landing_container">
+  <div class="landing-heading">
+    <h1>City of Bulawayo Water and Sanitation Department</h1>
+    <h2>Projects Dashboard</h2>
+  </div>
+  <div class="landing_flex">
+    <div class="about_container">
+      <p class="main_paragraph">
+        The BCC Projects Dashboard is your one-stop shop for gaining comprehensive insights into the health and progress of our ongoing endeavors.  
+        Here's a glimpse into the stories the various data points tell:
+      </p>
+      <h3>Contract Details</h3>
+      <p class="sub_paragraph">
+        The Contract Details section provides a comprehensive overview of the key details associated with each project,
+        including the project name, contract number, contract amount, and contract status.
+      </p>
+      <h3>Management and Timeline</h3>
+      <p class="sub_paragraph">
+        Identify the project manager assigned to each contract and track key dates like contract signing (by both BCC and the contractor),
+        early start and finish dates, and any extensions granted.
+      </p>
+      <h3>Financial Snapshot</h3>
+      <p class="sub_paragraph">
+        The dashboard empowers you to visualize the financial aspects of your projects. See the contract value, including the contingency buffer, alongside performance and advance payment guarantees and their expiry dates. 
+        Track the total certified interim payments made so far to gauge project spending.
+      </p>
+      <h3>Progress Tracking</h3>
+      <p class="sub_paragraph">
+        Evaluate project advancement through both financial and physical progress percentages. 
+        This dual perspective helps assess if expenditures are aligned with the physical completion stage.
+      </p>
+      <h3>Project Status</h3>
+      <p class="sub_paragraph">
+        Stay informed about the current status of each project (e.g., ongoing, completed, on hold). 
+        This allows for quick identification of potential roadblocks and facilitates informed decision-making.
+      </p>
+    </div>
+    <div class="login_container">
+      <h1 class="login-title">Login to Access the BCC Projects Dashboard</h1>
+      
+      <div class="form_container_div">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if form.errors or messages %} 
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="" class="form-container">
+          {{ form.hidden_tag() }}
+          <div>
+            <label for="{{ form.username.id }}">Username:</label>
+            {{ form.username(class="form-input") }}
+          </div>
+          <div>
+            <label for="{{ form.password.id }}">Password:</label>
+            {{ form.password(class="form-input") }}
+          </div>
+          <div>
+            {{ form.submit(class="form-submit btn btn-secondary") }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

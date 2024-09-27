@@ -18,8 +18,7 @@ def required_roles(*roles):
         @wraps(f)
         def wrapped(*args, **kwargs):
             if not any(current_user.has_role(role) for role in roles):
-                flash('You role does not allow you to access this page', 'error')
-                return redirect(url_for('login.login'))
+                return redirect(url_for('login.denied_access'))
             return f(*args, **kwargs)
         return wrapped
     return wrapper
