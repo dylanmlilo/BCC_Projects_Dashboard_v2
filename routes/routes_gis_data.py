@@ -7,13 +7,14 @@ from models.gis import (
 )
 from models.plot_functions import today_date
 from itertools import groupby
-import pandas as pd
+from models.decorators import required_roles
 
 
 gis_data_bp = Blueprint('gis_data', __name__)
 
 
 @gis_data_bp.route("/GIS", strict_slashes=False)
+@login_required
 def gis():
     """
     Function to handle GIS route.
@@ -41,6 +42,7 @@ def gis():
 
 @gis_data_bp.route("/GIS_data", strict_slashes=False)
 @login_required
+@required_roles("admin", "admin_gis")
 def gis_data():
     """
     Function to handle GIS data retrieval and rendering.

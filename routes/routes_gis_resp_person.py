@@ -1,12 +1,16 @@
 from flask import Blueprint, request, redirect, url_for, flash, jsonify
 from models.engine.database import session
 from models.gis import ResponsiblePerson
+from flask_login import login_required
+from models.decorators import required_roles
 
 
 gis_resp_person_bp = Blueprint('gis_resp_person', __name__)
 
 
 @gis_resp_person_bp.route("/insert_gis_resp_person_data", methods=['POST'])
+@login_required
+@required_roles("admin", "admin_gis")
 def insert_gis_resp_person_data():
     """
     Inserts the gis data into the database and redirects to the gis data page.
@@ -38,6 +42,8 @@ def insert_gis_resp_person_data():
 @gis_resp_person_bp.route(
     "/update_gis_resp_person_data/<int:gis_resp_person_data_id>",
     methods=['POST'])
+@login_required
+@required_roles("admin", "admin_gis")
 def update_gis_resp_person_data(gis_resp_person_data_id):
     """
     Updates the gis data into the database and redirects to the gis data page.
@@ -74,6 +80,8 @@ def update_gis_resp_person_data(gis_resp_person_data_id):
 
 @gis_resp_person_bp.route(
     "/delete_gis_resp_person_data/<int:gis_resp_person_data_id>")
+@login_required
+@required_roles("admin", "admin_gis")
 def delete_gis_resp_person_data(gis_resp_person_data_id):
     """
     Deletes the gis data from the database and redirects to the gis data page.

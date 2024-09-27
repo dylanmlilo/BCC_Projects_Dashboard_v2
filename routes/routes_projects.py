@@ -2,16 +2,21 @@ from flask import (
     Blueprint, render_template, abort,
     jsonify, request, redirect, url_for, flash
 )
+from flask_login import login_required
 from models.engine.database import session
 from models.plot_functions import today_date
 from models.projects import (
     ProjectsData, ProjectManagers, projects_data_to_dict_list
 )
+from models.decorators import required_roles
+
 
 projects_bp = Blueprint('projects', __name__)
 
 
 @projects_bp.route("/projects_data", strict_slashes=False)
+@login_required
+@required_roles('admin', 'admin_projects')
 def projects_data():
     """
     Function to handle projects data retrieval and rendering.
@@ -36,6 +41,8 @@ def projects_data():
 
 
 @projects_bp.route("/insert_project_manager", methods=['POST'])
+@login_required
+@required_roles('admin', 'admin_projects')
 def insert_project_manager():
     """
     Function to handle insert project manager route."""
@@ -62,6 +69,8 @@ def insert_project_manager():
 @projects_bp.route(
     "/update_projects_project_manager/<int:project_manager_id>",
     methods=['POST'])
+@login_required
+@required_roles('admin', 'admin_projects')
 def update_projects_project_manager(project_manager_id):
     """
     Function to handle update project manager route."""
@@ -91,7 +100,48 @@ def update_projects_project_manager(project_manager_id):
             session.close()
 
 
+@projects_bp.route(
+    "/delete_projects_project_manager/<int:project_manager_id>",
+    )
+@login_required
+@required_roles('admin', 'admin_projects')
+def delete_projects_project_manager(project_manager_id):
+    """
+    Function to handle delete project manager route.
+
+    Parameters:
+    - project_manager_id: The ID of the project manager to be deleted.
+
+    Returns:
+    - A redirect response to the projects data page.
+
+    """
+    try:
+        project_manager = (
+            session.query(ProjectManagers)
+            .filter_by(id=project_manager_id)
+            .first()
+            )
+        if project_manager:
+            session.delete(project_manager)
+            session.commit()
+            flash('Data deleted successfully')
+        else:
+            flash('Project manager not found')
+
+        return redirect(request.referrer)
+
+    except Exception as e:
+        session.rollback()
+        return jsonify({'error': str(e)}), 400
+    
+    finally:
+        session.close()
+
+
 @projects_bp.route('/insert_projects_data', methods=['POST'])
+@login_required
+@required_roles('admin', 'admin_projects')
 def insert_projects_data():
     """
     Inserts the project data into the database and

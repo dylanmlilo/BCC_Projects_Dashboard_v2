@@ -6,12 +6,14 @@ from models.plot_functions import today_date
 from models.engine.database import session
 from models.strategic import StrategicTask
 from models.projects import ProjectManagers
+from models.decorators import required_roles
 
 
 strategic_bp = Blueprint('strategic', __name__)
 
 
 @strategic_bp.route("/StrategicPlanning", strict_slashes=False)
+@login_required
 def strategic_planning():
     """
     Function to handle Strategic Planning route.
@@ -36,6 +38,7 @@ def strategic_planning():
 
 @strategic_bp.route("/strategic_planning_data", strict_slashes=False)
 @login_required
+@required_roles('admin', 'admin_struts')
 def strategic_planning_data():
     """
     Function to handle Strategic Planning data route.
@@ -62,6 +65,7 @@ def strategic_planning_data():
 
 @strategic_bp.route("/insert_strategic_data", methods=['POST'])
 @login_required
+@required_roles('admin', 'admin_struts')
 def insert_strategic_data():
     """
     Function to handle insert strategic data route.
@@ -128,6 +132,7 @@ def insert_strategic_data():
 @strategic_bp.route(
     "/update_strategic_data/<int:strategic_data_id>", methods=['POST'])
 @login_required
+@required_roles('admin', 'admin_struts')
 def update_strategic_data(strategic_data_id):
     """
     Function to handle update strategic data route.
@@ -186,6 +191,7 @@ def update_strategic_data(strategic_data_id):
 
 @strategic_bp.route("/delete_strategic_data/<int:strategic_data_id>")
 @login_required
+@required_roles('admin', 'admin_struts')
 def delete_strategic_data(strategic_data_id):
     """
     Function to handle delete strategic data route.

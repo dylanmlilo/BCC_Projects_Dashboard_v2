@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+from flask_login import login_required
 from models.projects import projects_data_to_dict_list
 from models.plot_functions import today_date, plot_servicing_page_charts
 
@@ -7,6 +8,7 @@ sections_bp = Blueprint('sections', __name__)
 
 
 @sections_bp.route("/Servicing", strict_slashes=False)
+@login_required
 def servicing():
     """
     Renders the 'servicing.html' template with project
@@ -28,6 +30,7 @@ def servicing():
 
 
 @sections_bp.route("/Goods", strict_slashes=True)
+@login_required
 def goods():
     """
     Function to handle /Goods route.
@@ -49,6 +52,7 @@ def goods():
 
 
 @sections_bp.route("/Works", strict_slashes=False)
+@login_required
 def works():
     """
     Function to handle works data retrieval and rendering.
@@ -69,6 +73,7 @@ def works():
 
 
 @sections_bp.route("/Services", strict_slashes=False)
+@login_required
 def services():
     """
     Function to handle Services route.

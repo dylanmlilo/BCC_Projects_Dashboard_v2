@@ -12,7 +12,7 @@ load_dotenv()
 login_bp = Blueprint('login', __name__)
 
 
-@login_bp.route('/login', strict_slashes=False, methods=['GET', 'POST'])
+@login_bp.route('/', strict_slashes=False, methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -26,7 +26,7 @@ def login():
             session.close()
         if user and user.password == form.password.data:
             login_user(user)
-            return redirect(url_for('admin_dashboard.admin_dashboard'))
+            return redirect(url_for('home.index'))
         else:
             flash('Invalid username or password', 'error')
     return render_template('login.html', form=form)
