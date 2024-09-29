@@ -259,7 +259,11 @@ h3 {
     border-radius: 20px;
     color: whitesmoke;
     text-shadow: 1px 1px 2px #000;
-  }
+}
+
+.denlogadmin_container {
+    background: url("../images/stp.jpg") no-repeat center;
+}
 
 .login_container {
     height: 500px;
@@ -650,7 +654,7 @@ h3 {
     }
 
     .stats-container.strategic{
-        background: url("../images/strats2.jpg") no-repeat;
+        background: url("../images/strats2.jpg") center no-repeat;
     }
 
     /* .stats-container.gis{

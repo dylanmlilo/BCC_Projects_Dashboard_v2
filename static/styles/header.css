@@ -31,3 +31,10 @@ nav .navbar-brand #logo {
     margin-right: 50px;
 }
 
+.navbar h5 {
+    color: #10528c;
+    border: 2px solid #10528c;
+    border-radius: 20px;
+    padding: 5px;
+    margin-bottom: 0px;
+}

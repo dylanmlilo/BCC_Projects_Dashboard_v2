@@ -45,17 +45,21 @@
               <li class="nav-item active">
                 <a class="dropdown-item" href="/admin_dashboard">Admin Dashboard</a>
               </li>
-                <li class="nav-item active">
-                  <a class="dropdown-item" href="/logout">Logout</a>
-                </li>
+              <li class="nav-item active">
+                <a class="dropdown-item" href="/logout">Logout</a>
+              </li>
             </ul>
-            <li class="nav-item active">
-              <form class="d-flex" role="search">
-                <a class="nav-link" href="#">
-                  <img src="../static/images/searching-bar.png" alt="Search" width="100px" height="100px">
-                </a>
-              </form>
-            </li>
+          </li>
+          <li class="nav-item active">
+            <form class="d-flex" role="search">
+              <a class="nav-link" href="#">
+                <img src="../static/images/searching-bar.png" alt="Search" width="100px" height="100px">
+              </a>
+            </form>
+          </li>
+          <li class="nav-item active">
+            <h5>{{ current_user.username }}</h5>
+          </li>
         </ul>
         {% endif %}
       </div>

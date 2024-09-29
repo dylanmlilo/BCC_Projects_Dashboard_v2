@@ -18,7 +18,7 @@ def required_roles(*roles):
         @wraps(f)
         def wrapped(*args, **kwargs):
             if not any(current_user.has_role(role) for role in roles):
-                return redirect(url_for('login.denied_access'))
+                return redirect(url_for('landing.denied_access'))
             return f(*args, **kwargs)
         return wrapped
     return wrapper
