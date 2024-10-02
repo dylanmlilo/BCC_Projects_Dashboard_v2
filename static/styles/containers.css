@@ -619,9 +619,9 @@ h3 {
         width: 95%;
     }
 
-    .dropdown:hover .dropdown-menu {
+    /* .dropdown:hover .dropdown-menu {
         display: block;
-    }
+    } */
 
     .img_container1, .img_container2 {
         width: 70%;
@@ -643,11 +643,11 @@ h3 {
     .pie_container .graph-container {
         width: 50%;
     }
-
+/* 
     .dropdown:hover .dropdown-menu {
         display: block;
-    }
-
+    } */
+    
     .img_container1, .img_container2 {
         width: 70%;
         height: 100%;

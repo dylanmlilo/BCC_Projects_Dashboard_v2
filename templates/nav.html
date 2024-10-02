@@ -32,7 +32,7 @@
             <a class="nav-link dropdown-toggle" href="#"
                id="navbarDropdownMore" role="button"
                data-bs-toggle="dropdown" aria-expanded="false">More</a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMore">
+            <ul class="dropdown-menu more" aria-labelledby="navbarDropdownMore">
               <li class="nav-item active">
                 <a class="dropdown-item" href="/Services">Services</a>
               </li>
@@ -41,12 +41,6 @@
               </li>
               <li class="nav-item active">
                 <a class="dropdown-item" href="/Goods">Goods</a>
-              </li>
-              <li class="nav-item active">
-                <a class="dropdown-item" href="/admin_dashboard">Admin Dashboard</a>
-              </li>
-              <li class="nav-item active">
-                <a class="dropdown-item" href="/logout">Logout</a>
               </li>
             </ul>
           </li>
@@ -57,10 +51,20 @@
               </a>
             </form>
           </li>
-          <li class="nav-item active">
-            <h5>{{ current_user.username }}</h5>
+          <li class="nav-item active dropdown">
+            <a class="nav-link" href="#"
+               id="navbarDropdownUsername" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false"><h5>{{ current_user.username }}</h5>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end username" aria-labelledby="navbarDropdownUsername">
+              <li class="nav-item active">
+                <a class="dropdown-item" href="/admin_dashboard">Admin Dashboard</a>
+              </li>
+              <li class="nav-item active">
+                <a class="dropdown-item" href="/logout">Logout</a>
+              </li>
+            </ul>
           </li>
-        </ul>
         {% endif %}
       </div>
     </div>
